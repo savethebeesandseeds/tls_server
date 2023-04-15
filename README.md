@@ -8,6 +8,7 @@ https://www.gnu.org/software/libmicrohttpd/tutorial.html
 
 https://github.com/cnlohr/rawdrawandroid (how to build the client files as an android app build in c)
 # Requires 
+- libcurl
 - libmicrohttpd
 # Build instructions
 download latest version of libcurl https://curl.se/download.html 
