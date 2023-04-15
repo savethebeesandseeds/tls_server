@@ -4,7 +4,7 @@
 #include "file_piaabo.h"
 #include "auth_client_basic.h"
 
-#define PORT 8888
+#define SERVERPORT 8888
 #define SERVERCERTKEYFILE "access/server.key.pem"
 #define SERVERCERTPEMFILE "access/server.pem"
 
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]){
   /* create server daemon */
   struct MHD_Daemon *daemon;
   daemon = MHD_start_daemon(
-    MHD_USE_THREAD_PER_CONNECTION | MHD_USE_SSL, PORT, 
+    MHD_USE_DEBUG | MHD_USE_INTERNAL_POLLING_THREAD | MHD_USE_THREAD_PER_CONNECTION | MHD_USE_SSL, SERVERPORT, 
     on_client_connect, NULL,
     &answer_to_connection_basic_auth, NULL, 
     MHD_OPTION_HTTPS_MEM_KEY, server_cert_key,
@@ -73,9 +73,9 @@ int main(int argc, char *argv[]){
     return 1;
   }
   /* loop */
-  log("[Running server...]\n");
+  log("[Running server on port %s%d%s]...\n",ANSI_COLOR_Red,SERVERPORT,ANSI_COLOR_RESET);
   getchar();
-  log("[Closing server...]\n");
+  log("[Closing server]...\n");
   /* stop server daemon */
   MHD_stop_daemon(daemon);
   /* free keys chars */

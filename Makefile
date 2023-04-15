@@ -1,6 +1,6 @@
 ENV := gdb-debug
-ENV := valgrind-debug
 ENV := no-debug
+ENV := valgrind-debug
 
 STATIC_FLAGS := -static # enable static
 STATIC_FLAGS := # disable static
@@ -36,29 +36,9 @@ GPP += -Wall $(STATIC_FLAGS)
 GCC += -Wall $(STATIC_FLAGS) 
 endif
 endif
-# $(libMHD_path)/libmicrohttpd.a 
-
-# GPP += -Wno-pointer-arith
-
-# sdl_cflags := $(shell pkg-config --cflags sdl2 SDL2_mixer SDL2_image SDL2_ttf)
-# # # # # sdl_libs := $(shell pkg-config --libs sdl2 SDL2_mixer SDL2_image SDL2_ttf)
-# GPP += $(sdl_cflags)
-# GPP += $(sdl_libs)
-
-# torch_cflags := -D_GLIBCXX_USE_CXX11_ABI=0 -std=gnu++17
-# torch_libs := -std=c++17 -L${libtorch_path}/lib -Wl,-R${libtorch_path}/lib -ltorch -ltorch_cpu -lc10
-# GPP += $(torch_cflags)
-# GPP += $(torch_libs)
 
 HEADERS := \
-	-I $(libimu_path)/ \
-	# -I $(libMHD_path)/ \
-	# -I ${libtorch_path}/lib \
-	# -I ${libtorch_path}/include/ \
-	# -I ${libtorch_path}/include/torch/csrc/api/include
-
-# -I $(libigen3_path)/ \
-# -I $(libimu_path)/ \
+	-I $(libimu_path)/ 
 
 m_clean:
 	rm -f ./build/*.imux
@@ -68,16 +48,16 @@ m_server_basic_auth:
 	$(libimu_path)/../server_basic_auth.c $(SERVER_LINKS) -o ./build/server_basic_auth.imux
 
 m_client_basic_auth:
-	$(GPP) $(HEADERS) \
-	$(libimu_path)/../client_basic_auth.cpp $(CLIENT_LINKS) -o ./build/client_basic_auth.imux
+	$(GCC) $(HEADERS) \
+	$(libimu_path)/../client_basic_auth.c $(CLIENT_LINKS) -o ./build/client_basic_auth.imux
 
 m_server_tls_auth:
 	$(GCC) $(HEADERS) \
 	$(libimu_path)/../server_tls_auth.c $(SERVER_LINKS) -o ./build/server_tls_auth.imux
 
 m_client_tls_auth:
-	$(GPP) $(HEADERS) \
-	$(libimu_path)/../client_tls_auth.cpp $(CLIENT_LINKS) -o ./build/client_tls_auth.imux
+	$(GCC) $(HEADERS) \
+	$(libimu_path)/../client_tls_auth.c $(CLIENT_LINKS) -o ./build/client_tls_auth.imux
 
 server_basic_auth:
 	make m_server_basic_auth

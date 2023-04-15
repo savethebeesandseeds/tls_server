@@ -101,6 +101,10 @@ static void log_request(
 static enum MHD_Result session_cookie(
   struct MHD_Connection *connection,
   struct MHD_Response *response){
+  /* validate the response */
+  if(response==NULL)
+    response = MHD_create_response_from_buffer(
+      0, NULL, MHD_RESPMEM_PERSISTENT);
   /* reading cookies */
   const char *read_value = 
     MHD_lookup_connection_value(
@@ -130,8 +134,9 @@ static enum MHD_Result respond_with_html(
   enum MHD_Result ret;
   const char *content_type="text/html";
   /* fill response from buffer */
-  response = MHD_create_response_from_buffer(
-    strlen(page_contents), (void*)page_contents, MHD_RESPMEM_PERSISTENT);
+  if(response == NULL)
+    response = MHD_create_response_from_buffer(
+      strlen(page_contents), (void*)page_contents, MHD_RESPMEM_PERSISTENT);
   /* verify the response has been set */
   if(response==NULL)
     return MHD_NO;
@@ -192,6 +197,7 @@ static enum MHD_Result favicon_route(
   void *dh_cls,
   struct MHD_Connection *connection){
   struct MHD_Response *response=NULL;
+  /* respond with file image */
   return respond_with_file(
     open(FAVICON, O_RDONLY), "image/png", 
     connection, response, MHD_HTTP_OK);
@@ -201,8 +207,8 @@ static enum MHD_Result default_route(
   void *dh_cls,
   struct MHD_Connection *connection){
   struct MHD_Response *response=NULL;
-  /* render HTML response (default) */
-  return respond_with_html(
+  /* respond with html */
+  return  respond_with_html(
     "<html><body>Hello, browser!</body></html>", 
     connection, response, MHD_HTTP_OK);
 }

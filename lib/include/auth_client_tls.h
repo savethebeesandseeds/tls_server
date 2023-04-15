@@ -9,10 +9,18 @@
 
 static enum MHD_Result ask_for_tls_authentication(
   struct MHD_Connection *connection){
-  struct MHD_Response *response;
-  return respond_with_html(
+  struct MHD_Response *response; 
+  /* create a empty response */
+  response= MHD_create_response_from_buffer(
+    0, NULL, MHD_RESPMEM_PERSISTENT);
+  /* respond with file */
+  enum MHD_Result ret = respond_with_html(
       "<html><body>Request requires a valid SSL/TLS certificate!</body></html>", 
       connection, response, MHD_HTTP_UNAUTHORIZED);
+  /* free presponse buffer */
+  MHD_destroy_response(response);
+  /* return success */
+  return ret;
 }
 /* extract the clients tls session */
 static gnutls_session_t get_tls_session(
