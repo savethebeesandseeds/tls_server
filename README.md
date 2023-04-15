@@ -1,16 +1,27 @@
 # Waajacu tls_server
-This is a starting bench for projects that use Client and Server side tls authentication
+This is a fully implemented C server, a bench for projects that use Client and Server side tls authentication.
+
+It implements:
+
+- a basic auth server
+- a basic auth client
+- a tls auth server
+- a tls auth client
+
+Both basic auth and tls auth servers use a self signed ssh certificate to authenticate the server to the public.
+the difference on basic auth and tls auth, is that the client is required either a {user, pass} or a {tls file} 
+for authentication.
 
 # Educational Resources
 https://curl.se/docs/manual.html
-
 https://www.gnu.org/software/libmicrohttpd/tutorial.html
 
-https://github.com/cnlohr/rawdrawandroid (how to build the client files as an android app build in c)
 # Requires 
+The development builds for:
 - libcurl
 - libmicrohttpd
-# Build instructions
+
+# Build instructions (Linux)
 download latest version of libcurl https://curl.se/download.html 
 ```
 [user@waajacu ~]$ cd ./path/to/Downloads
@@ -40,7 +51,7 @@ Install static dependencies (optional, required to compile static)
 [user@waajacu ~]$ glibc++-static
 [user@waajacu ~]$ libstdc++-static
 ```
-# Server Authentication instructions
+# Server Authentication instructions (Linux)
 Generate the server side identity files
 ```
 [user@waajacu ~]$ cd /path/to/proyect/tls_server
@@ -49,14 +60,14 @@ Generate the server side identity files
 [user@waajacu access]$ openssl req -new -x509 -nodes -sha1 -days 365 -key server.key.pem > server.cert
 [user@waajacu access]$ cat server.cert server.key.pem > server.pem
 ```
-# Client Authehticantion steps
+# Client Authehticantion steps (Linux)
 Generate the client side identity files
 ```
 [user@waajacu access]$ openssl genrsa -out client.key.pem 2048
 [user@waajacu access]$ openssl req -x509 -sha256 -new -nodes -key client.key.pem -days 3650 -out client.pem
 ```
-# Run Instructions
-## Basic authentication server
+# Run Instructions (Linux)
+## Basic authentication server (Linux)
 Run a server with basic authentication privilege access
 ```
 [user@waajacu ~]$ cd /path/to/proyect/tls_server
@@ -70,7 +81,7 @@ Here enter localhost:8888 in a web browser to check the server, or build the bas
 [user@waajacu tls_server]$ make client_basic_auth
 [user@waajacu tls_server]$ ./build/client_basic_auth.imux
 ```
-## TLS authentication server
+## TLS authentication server (Linux)
 Run a server with tls authentication privilege access
 ```
 [user@waajacu ~]$ cd /path/to/proyect/tls_server
